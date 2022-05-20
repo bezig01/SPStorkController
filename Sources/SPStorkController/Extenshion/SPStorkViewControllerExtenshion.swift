@@ -25,8 +25,8 @@ extension UIViewController {
     
     public var isPresentedAsStork: Bool {
         return transitioningDelegate is SPStorkTransitioningDelegate
-            && modalPresentationStyle == .custom
-            && presentingViewController != nil
+        && modalPresentationStyle == .custom
+        && presentingViewController != nil
     }
     
     public func presentAsStork(_ controller: UIViewController, height: CGFloat? = nil) {

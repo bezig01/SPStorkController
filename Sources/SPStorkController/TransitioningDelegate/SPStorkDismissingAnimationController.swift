@@ -22,13 +22,15 @@
 import UIKit
 
 final class SPStorkDismissingAnimationController: NSObject, UIViewControllerAnimatedTransitioning {
-
+    
+    var propertyAnimator: UIViewPropertyAnimator!
+    
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         
         guard let presentedViewController = transitionContext.viewController(forKey: .from) else {
             return
         }
-
+        
         let finalFrameForPresentedView = transitionContext.finalFrame(for: presentedViewController)
         
         let containerView = transitionContext.containerView
@@ -42,9 +44,11 @@ final class SPStorkDismissingAnimationController: NSObject, UIViewControllerAnim
             options: .curveEaseIn,
             animations: {
                 presentedViewController.view.frame = offscreenFrame
-        }) { finished in
+            }) { finished in
                 transitionContext.completeTransition(finished)
-        }
+            }
+        
+        propertyAnimator?.fractionComplete = 0
     }
     
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {

@@ -22,14 +22,21 @@
 import UIKit
 
 final class SPStorkPresentingAnimationController: NSObject, UIViewControllerAnimatedTransitioning {
-
+    
+    var propertyAnimator: UIViewPropertyAnimator!
+    var blurView: UIVisualEffectView!
+    
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         
         guard let presentedViewController = transitionContext.viewController(forKey: .to) else { return }
         
         let containerView = transitionContext.containerView
+        
+        containerView.addSubview(blurView)
+        blurView.frame = containerView.bounds
+        
         containerView.addSubview(presentedViewController.view)
-
+        
         let finalFrameForPresentedView = transitionContext.finalFrame(for: presentedViewController)
         presentedViewController.view.frame = finalFrameForPresentedView
         presentedViewController.view.frame.origin.y = containerView.bounds.height
@@ -42,9 +49,11 @@ final class SPStorkPresentingAnimationController: NSObject, UIViewControllerAnim
             options: .curveEaseOut,
             animations: {
                 presentedViewController.view.frame = finalFrameForPresentedView
-        }, completion: { finished in
-            transitionContext.completeTransition(finished)
-        })
+            }, completion: { finished in
+                transitionContext.completeTransition(finished)
+            })
+        
+        propertyAnimator?.fractionComplete = 0.05
     }
     
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {

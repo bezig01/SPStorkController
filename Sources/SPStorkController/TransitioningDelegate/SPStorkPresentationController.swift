@@ -59,7 +59,7 @@ class SPStorkPresentationController: UIPresentationController, UIGestureRecogniz
     
     private var topSpace: CGFloat {
         let statusBarHeight: CGFloat = UIApplication.shared.statusBarFrame.height
-        return (statusBarHeight < 25) ? 30 : statusBarHeight
+        return (statusBarHeight < 25) ? statusBarHeight : 0
     }
     
     private let alpha: CGFloat =  0.51
@@ -121,7 +121,7 @@ class SPStorkPresentationController: UIPresentationController, UIGestureRecogniz
             self.indicatorView.centerXAnchor.constraint(equalTo: presentedView.centerXAnchor).isActive = true
             self.indicatorView.topAnchor.constraint(equalTo: presentedView.topAnchor, constant: 12).isActive = true
             self.indicatorView.mode = self.indicatorMode
-
+            
             if UIAccessibility.isVoiceOverRunning {
                 let accessibleIndicatorOverlayButton = UIButton(type: .custom)
                 accessibleIndicatorOverlayButton.addTarget(self, action: #selector(self.tapIndicator), for: .touchUpInside)
@@ -139,7 +139,7 @@ class SPStorkPresentationController: UIPresentationController, UIGestureRecogniz
         self.updateLayoutIndicator()
         self.indicatorView.style = .arrow
         self.gradeView.alpha = 0
-
+        
         self.closeButton.accessibilityLabel = closeTitle
         if self.showCloseButton {
             self.closeButton.addTarget(self, action: #selector(self.tapCloseButton), for: .touchUpInside)
@@ -211,7 +211,7 @@ class SPStorkPresentationController: UIPresentationController, UIGestureRecogniz
                 self.snapshotView?.transform = .identity
                 rootSnapshotView?.removeFromSuperview()
                 rootSnapshotRoundedView?.removeFromSuperview()
-        })
+            })
         
         if self.hapticMoments.contains(.willPresent) {
             self.feedbackGenerator.impactOccurred()
@@ -305,7 +305,7 @@ class SPStorkPresentationController: UIPresentationController, UIGestureRecogniz
             }, completion: { _ in
                 rootSnapshotView?.removeFromSuperview()
                 rootSnapshotRoundedView?.removeFromSuperview()
-        })
+            })
     }
     
     override func dismissalTransitionDidEnd(_ completed: Bool) {
@@ -411,7 +411,7 @@ extension SPStorkPresentationController {
                         self.snapshotView?.transform = .identity
                         self.presentedView?.transform = .identity
                         self.gradeView.alpha = self.alpha
-                })
+                    })
             }
             
             if translation >= self.translateForDismiss {

@@ -37,6 +37,19 @@ public final class SPStorkTransitioningDelegate: NSObject, UIViewControllerTrans
     public weak var storkDelegate: SPStorkControllerDelegate? = nil
     public weak var confirmDelegate: SPStorkControllerConfirmDelegate? = nil
     
+    private let blurView = UIVisualEffectView(effect: nil)
+    
+    private lazy var propertyAnimator: UIViewPropertyAnimator? = {
+        let animator = UIViewPropertyAnimator(duration: 0.6, dampingRatio: 1) {
+            if #available(iOS 13.0, *) {
+                self.blurView.effect = UIBlurEffect(style: .systemMaterial)
+            } else {
+                self.blurView.effect = UIBlurEffect(style: .regular)
+            }
+        }
+        return animator
+    }()
+    
     public func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
         let controller = SPStorkPresentationController(presentedViewController: presented, presenting: presenting)
         controller.swipeToDismissEnabled = self.swipeToDismissEnabled
@@ -57,10 +70,22 @@ public final class SPStorkTransitioningDelegate: NSObject, UIViewControllerTrans
     }
     
     public func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return SPStorkPresentingAnimationController()
+        let controller = SPStorkPresentingAnimationController()
+        controller.propertyAnimator = propertyAnimator
+        controller.blurView = blurView
+        return controller
     }
     
     public func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return SPStorkDismissingAnimationController()
+        let controller = SPStorkDismissingAnimationController()
+        controller.propertyAnimator = propertyAnimator
+        return controller
+    }
+    
+    deinit {
+        print(String(describing: self), #function)
+        
+        propertyAnimator?.stopAnimation(false)
+        propertyAnimator?.finishAnimation(at: .current)
     }
 }
