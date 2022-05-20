@@ -47,6 +47,7 @@ public final class SPStorkTransitioningDelegate: NSObject, UIViewControllerTrans
                 self.blurView.effect = UIBlurEffect(style: .regular)
             }
         }
+        animator.pausesOnCompletion = true
         return animator
     }()
     

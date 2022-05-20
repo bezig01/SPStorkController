@@ -23,7 +23,7 @@ import UIKit
 
 final class SPStorkDismissingAnimationController: NSObject, UIViewControllerAnimatedTransitioning {
     
-    var propertyAnimator: UIViewPropertyAnimator!
+    private var propertyAnimator: UIViewPropertyAnimator!
     
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         

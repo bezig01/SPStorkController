@@ -23,8 +23,8 @@ import UIKit
 
 final class SPStorkPresentingAnimationController: NSObject, UIViewControllerAnimatedTransitioning {
     
-    var propertyAnimator: UIViewPropertyAnimator!
-    var blurView: UIVisualEffectView!
+    private var propertyAnimator: UIViewPropertyAnimator!
+    private var blurView: UIVisualEffectView!
     
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         
